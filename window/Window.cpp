@@ -9,12 +9,12 @@ class Window {
     std::string TITLE;
 
 public:
-    Window(int _HEIGHT, int _WIDTH, std::string _TITLE){
-        HEIGHT = _HEIGHT;
-        WIDTH = _WIDTH;
-        TITLE = _TITLE;
-        createWindow();
-    }
+    Window(int _HEIGHT, int _WIDTH, std::string _TITLE)
+        :HEIGHT(_HEIGHT), WIDTH(_WIDTH), TITLE(_TITLE)
+        {
+            createWindow();
+        }
+
     ~Window(){
         SDL_DestroyWindow(window);
         window = nullptr;
