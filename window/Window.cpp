@@ -1,41 +1,32 @@
-#include <SDL/SDL.h>
-#include <iostream>
-#include <string>
+#include "Window.h"
 
-class Window {
-    SDL_Window *window = nullptr;
-    int HEIGHT;
-    int WIDTH;
-    std::string TITLE;
 
-public:
-    Window(int _HEIGHT, int _WIDTH, std::string _TITLE)
-        :HEIGHT(_HEIGHT), WIDTH(_WIDTH), TITLE(_TITLE)
-        {
-            createWindow();
-        }
 
-    ~Window(){
-        SDL_DestroyWindow(window);
-        window = nullptr;
+Window::Window(int _HEIGHT, int _WIDTH, std::string _TITLE)
+    :HEIGHT(_HEIGHT), WIDTH(_WIDTH), TITLE(_TITLE)
+    {
+        createWindow();
     }
-    SDL_Window* getWindow() const {
-        return window;
+
+Window::~Window(){
+    SDL_DestroyWindow(window);
+    window = nullptr;
+}
+SDL_Window* Window::getWindow() const {
+    return window;
+}
+int Window::getHeight() const {
+    return HEIGHT;
+}
+int Window::getWidth() const {
+    return WIDTH;
+}
+void Window::createWindow() {
+    
+    window = SDL_CreateWindow(TITLE.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
+    if(window == nullptr){
+        printf("window could not be created. Error: %s\n", SDL_GetError());
     }
-    int getHeight() const {
-        return HEIGHT;
-    }
-    int getWidth() const {
-        return WIDTH;
-    }
-private:
-    void createWindow() {
-        
-        window = SDL_CreateWindow(TITLE.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
-        if(window == nullptr){
-            printf("window could not be created. Error: %s\n", SDL_GetError());
-        }
-        
-        
-    }
-};
+    
+    
+}
