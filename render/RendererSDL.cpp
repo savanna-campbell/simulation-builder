@@ -32,14 +32,14 @@ int Renderer::drawCircle(const Circle& circle){
     status = 0;
     while (offsety >= offsetx)
     {
-        status += SDL_RenderDrawPoint(renderer, circle.x + offsetx, circle.y + offsety);
-        status += SDL_RenderDrawPoint(renderer, circle.x + offsety, circle.y + offsetx);
-        status += SDL_RenderDrawPoint(renderer, circle.x - offsetx, circle.y + offsety);
-        status += SDL_RenderDrawPoint(renderer, circle.x - offsety, circle.y + offsetx);
-        status += SDL_RenderDrawPoint(renderer, circle.x + offsetx, circle.y - offsety);
-        status += SDL_RenderDrawPoint(renderer, circle.x + offsety, circle.y - offsetx);
-        status += SDL_RenderDrawPoint(renderer, circle.x - offsetx, circle.y - offsety);
-        status += SDL_RenderDrawPoint(renderer, circle.x - offsety, circle.y - offsetx);
+        status += SDL_RenderDrawPoint(renderer, circle.position.x + offsetx, circle.position.y + offsety);
+        status += SDL_RenderDrawPoint(renderer, circle.position.x + offsety, circle.position.y + offsetx);
+        status += SDL_RenderDrawPoint(renderer, circle.position.x - offsetx, circle.position.y + offsety);
+        status += SDL_RenderDrawPoint(renderer, circle.position.x - offsety, circle.position.y + offsetx);
+        status += SDL_RenderDrawPoint(renderer, circle.position.x + offsetx, circle.position.y - offsety);
+        status += SDL_RenderDrawPoint(renderer, circle.position.x + offsety, circle.position.y - offsetx);
+        status += SDL_RenderDrawPoint(renderer, circle.position.x - offsetx, circle.position.y - offsety);
+        status += SDL_RenderDrawPoint(renderer, circle.position.x - offsety, circle.position.y - offsetx);
         
         if (status < 0) {
             status = -1;
@@ -76,14 +76,14 @@ int Renderer::fillCircle(const Circle& circle) {
 
     while (offsety >= offsetx)
     {
-        status += SDL_RenderDrawLine(renderer, circle.x - offsety, circle.y + offsetx,
-                                        circle.x + offsety, circle.y + offsetx);
-        status += SDL_RenderDrawLine(renderer, circle.x - offsetx, circle.y + offsety,
-                                        circle.x + offsetx, circle.y + offsety);
-        status += SDL_RenderDrawLine(renderer, circle.x - offsety, circle.y - offsetx,
-                                        circle.x + offsety, circle.y - offsetx);
-        status += SDL_RenderDrawLine(renderer, circle.x - offsetx, circle.y - offsety,
-                                        circle.x + offsetx, circle.y - offsety);
+        status += SDL_RenderDrawLine(renderer, circle.position.x - offsety, circle.position.y + offsetx,
+                                        circle.position.x + offsety, circle.position.y + offsetx);
+        status += SDL_RenderDrawLine(renderer, circle.position.x - offsetx, circle.position.y + offsety,
+                                        circle.position.x + offsetx, circle.position.y + offsety);
+        status += SDL_RenderDrawLine(renderer, circle.position.x - offsety, circle.position.y - offsetx,
+                                        circle.position.x + offsety, circle.position.y - offsetx);
+        status += SDL_RenderDrawLine(renderer, circle.position.x - offsetx, circle.position.y - offsety,
+                                        circle.position.x + offsetx, circle.position.y - offsety);
         
         if (status < 0) {
             status = -1;
@@ -142,6 +142,6 @@ void Renderer::setDrawColor(int R, int G, int B, int A){
     SDL_SetRenderDrawColor(renderer, R, G, B, A);
 }
 
-SDL_Renderer* getRenderer(){
+SDL_Renderer* Renderer::getRenderer(){
     return renderer;
 }

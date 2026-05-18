@@ -19,7 +19,7 @@ struct Vec2
             x - Other.x,
             y - Other.y};
     }
-    
+
     Vec2 operator*(float Multiplier) const {
         return Vec2{
             x * Multiplier,
@@ -41,7 +41,7 @@ struct Vec2
         return *this;
     }
     Vec2& operator/=(float Divisor) {
-        if (Divisor = 0.0f){
+        if (Divisor == 0.0f){
             return *this;
         }
         x /= Divisor;
