@@ -18,28 +18,44 @@ Renderer::~Renderer(){
     }
 }
 
-int Renderer::drawCircle(const Circle& circle){
+void Renderer::drawObj(const Object* obj) {
+    if (obj == nullptr){
+        return;
+    }
+    if(Circle* circle = dynamic_cast<Circle*>(obj->shape)) {
+        drawCircle(obj->position, circle->radius);
+    }
+    if(AABB* aabb = dynamic_cast<AABB*>(obj->shape)) {
+        drawAABB(obj->position, aabb->halfSize);
+    }
+}
+
+int Renderer::drawCircle(const Vec2& position, float r){
     if(renderer==nullptr) {
         return -1;
     }
     // use midpoint circle algorithm
+
+    int x = static_cast<int>(position.x);
+    int y = static_cast<int>(position.y);
+    int radius = static_cast<int>(r);
     int offsetx, offsety, d;
     int status;
 
     offsetx = 0;
-    offsety = circle.radius;
-    d = circle.radius - 1;
+    offsety = radius;
+    d = radius - 1;
     status = 0;
     while (offsety >= offsetx)
     {
-        status += SDL_RenderDrawPoint(renderer, circle.position.x + offsetx, circle.position.y + offsety);
-        status += SDL_RenderDrawPoint(renderer, circle.position.x + offsety, circle.position.y + offsetx);
-        status += SDL_RenderDrawPoint(renderer, circle.position.x - offsetx, circle.position.y + offsety);
-        status += SDL_RenderDrawPoint(renderer, circle.position.x - offsety, circle.position.y + offsetx);
-        status += SDL_RenderDrawPoint(renderer, circle.position.x + offsetx, circle.position.y - offsety);
-        status += SDL_RenderDrawPoint(renderer, circle.position.x + offsety, circle.position.y - offsetx);
-        status += SDL_RenderDrawPoint(renderer, circle.position.x - offsetx, circle.position.y - offsety);
-        status += SDL_RenderDrawPoint(renderer, circle.position.x - offsety, circle.position.y - offsetx);
+        status += SDL_RenderDrawPoint(renderer, x + offsetx, y + offsety);
+        status += SDL_RenderDrawPoint(renderer, x + offsety, y + offsetx);
+        status += SDL_RenderDrawPoint(renderer, x - offsetx, y + offsety);
+        status += SDL_RenderDrawPoint(renderer, x - offsety, y + offsetx);
+        status += SDL_RenderDrawPoint(renderer, x + offsetx, y - offsety);
+        status += SDL_RenderDrawPoint(renderer, x + offsety, y - offsetx);
+        status += SDL_RenderDrawPoint(renderer, x - offsetx, y - offsety);
+        status += SDL_RenderDrawPoint(renderer, x - offsety, y - offsetx);
         
         if (status < 0) {
             status = -1;
@@ -50,7 +66,7 @@ int Renderer::drawCircle(const Circle& circle){
             d -= 2 * offsetx + 1;
             offsetx += 1;
         }
-        else if (d < 2 * (circle.radius - offsety)) {
+        else if (d < 2 * (radius - offsety)) {
             d += 2 * offsety - 1;
             offsety -= 1;
         }
@@ -63,27 +79,34 @@ int Renderer::drawCircle(const Circle& circle){
     return status;
 }
 
-int Renderer::fillCircle(const Circle& circle) {
+int Renderer::fillCircle(const Vec2& position, float r) {
     if(renderer==nullptr) {
         return -1;
     }
+    int x = static_cast<int>(position.x);
+    int y = static_cast<int>(position.y);
+    int radius = static_cast<int>(r);
+
     int offsetx, offsety, d;
     int status;
+    
     offsetx = 0;
-    offsety = circle.radius;
-    d = circle.radius - 1;
+    offsety = radius;
+    
+    d = radius - 1;
+    
     status = 0;
 
     while (offsety >= offsetx)
     {
-        status += SDL_RenderDrawLine(renderer, circle.position.x - offsety, circle.position.y + offsetx,
-                                        circle.position.x + offsety, circle.position.y + offsetx);
-        status += SDL_RenderDrawLine(renderer, circle.position.x - offsetx, circle.position.y + offsety,
-                                        circle.position.x + offsetx, circle.position.y + offsety);
-        status += SDL_RenderDrawLine(renderer, circle.position.x - offsety, circle.position.y - offsetx,
-                                        circle.position.x + offsety, circle.position.y - offsetx);
-        status += SDL_RenderDrawLine(renderer, circle.position.x - offsetx, circle.position.y - offsety,
-                                        circle.position.x + offsetx, circle.position.y - offsety);
+        status += SDL_RenderDrawLine(renderer, x - offsety, y + offsetx,
+                                        x + offsety, y + offsetx);
+        status += SDL_RenderDrawLine(renderer, x - offsetx, y + offsety,
+                                        x + offsetx, y + offsety);
+        status += SDL_RenderDrawLine(renderer, x - offsety, y - offsetx,
+                                        x + offsety, y - offsetx);
+        status += SDL_RenderDrawLine(renderer, x - offsetx, y - offsety,
+                                        x + offsetx, y - offsety);
         
         if (status < 0) {
             status = -1;
@@ -95,7 +118,7 @@ int Renderer::fillCircle(const Circle& circle) {
             d -= 2 * offsetx + 1;
             offsetx += 1;
         }
-        else if (d < 2 * (circle.radius - offsety)) {
+        else if (d < 2 * (radius - offsety)) {
             d += 2 * offsety - 1;
             offsety -= 1;
         }
@@ -108,15 +131,15 @@ int Renderer::fillCircle(const Circle& circle) {
     return status;
 }
 
-void Renderer::drawAABB(const AABB& aabb) {
+void Renderer::drawAABB(const Vec2& position, const Vec2& halfsize) {
     if(renderer==nullptr) {
         return;
     }
     SDL_Rect rect {
-        static_cast<int>(aabb.min.x),
-        static_cast<int>(aabb.min.y),
-        static_cast<int>(aabb.max.x - aabb.min.x),
-        static_cast<int>(aabb.max.y - aabb.min.y)
+        static_cast<int>(position.x - halfsize.x),
+        static_cast<int>(position.y - halfsize.y),
+        static_cast<int>(2 * halfsize.x),
+        static_cast<int>(2 * halfsize.y)
     };
     SDL_RenderFillRect(renderer, &rect);
 }

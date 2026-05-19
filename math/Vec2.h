@@ -48,6 +48,11 @@ struct Vec2
         y /= Divisor;
         return *this;
     }
+    Vec2& operator+=(const Vec2 Other) {
+        x += Other.x;
+        y += Other.y;
+        return *this;
+    }
 
     float GetLength() const {
         return std::sqrt(x * x + y * y);

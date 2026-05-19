@@ -2,6 +2,8 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include "../physics/Shapes.h"
+#include "../physics/RigidBody.h"
+
 
 class Renderer {
     private:
@@ -13,10 +15,12 @@ class Renderer {
     Renderer(const Renderer &) = delete;
     Renderer &operator=(const Renderer &) = delete;
 
-    int drawCircle(const Circle &circle);
-    int fillCircle(const Circle &circle);
+    void drawObj(const Object *obj);
 
-    void drawAABB(const AABB &aabb);
+    int drawCircle(const Vec2& position, float r);
+    int fillCircle(const Vec2& position, float r);
+
+    void drawAABB(const Vec2& position, const Vec2& halfsize);
 
     void clear();
 
