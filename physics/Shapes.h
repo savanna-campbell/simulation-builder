@@ -4,7 +4,18 @@
 #include <iostream>
 
 // axis aligned bounding boxes
-struct Shape {
+enum class ShapeType
+{
+    Circle,
+    AABB
+};
+
+struct Shape
+{
+    ShapeType type;
+    Shape(Shapetype type)
+    : type(type) {}
+
     virtual ~Shape() = default;
 };
 
@@ -12,12 +23,12 @@ struct AABB : Shape
 {
     Vec2 halfSize;
     AABB(Vec2 halfSize)
-        : halfSize(halfSize) {}
+        : Shape(ShapeType::Circle), halfSize(halfSize) {}
 };
 
 struct Circle : Shape
 {
     float radius;
     Circle(float radius)
-    : radius(radius) {}
+    : Shape(ShapeType::Circle), radius(radius) {}
 };
